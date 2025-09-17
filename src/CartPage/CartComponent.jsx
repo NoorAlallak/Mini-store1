@@ -1,10 +1,12 @@
 import { useCart } from "../SharedContext/UseCart";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 function CartComponent() {
   const { cartItems, removeItem, updateQty, clearCart, total } = useCart();
   const [showPopUp, setShowPopUp] = useState(false);
   const [isClearAll, setIsClearAll] = useState(false);
   const [itemToRemove, setItemToRemove] = useState(null);
+  const navigate = useNavigate();
 
   const handleRemoveItem = (id) => {
     setItemToRemove(id);
@@ -16,6 +18,10 @@ function CartComponent() {
     setIsClearAll(true);
     setShowPopUp(true);
   };
+  const handleGoToCheckout = () => {
+    navigate("/checkout");
+  };
+
   if (cartItems.length === 0) {
     return (
       <div className="p-5 text-center">
@@ -60,16 +66,25 @@ function CartComponent() {
           </div>
         </div>
       ))}
-      <div className="border-t pt-4 flex flex-row justify-between items-center">
-        <p className="text-xl font-semibold mt-3">
-          <strong>Total: </strong> {total}$
+      <div className=" p-4 flex flex-col text-center ">
+        <p className="text-2xl font-semibold ">
+          <strong>Total: </strong> {total.toFixed(2)}$
         </p>
-        <button
-          onClick={handleClearCart}
-          className="mt-4 bg-red-500 text-white py-1 px-4 rounded hover:bg-red-600 transition-colors duration-300 cursor-pointer self-start"
-        >
-          Clear Cart
-        </button>
+        <div className="flex flex-row items-center my-3 justify-center gap-4 w-full max-w-sm my-6">
+          <button
+            onClick={handleClearCart}
+            className="rounded bg-red-500 text-white py-1 px-4 hover:bg-red-600 transition-colors duration-300 cursor-pointer"
+          >
+            Clear Cart
+          </button>
+          <button
+            onClick={handleGoToCheckout}
+            className="rounded bg-[#459c98] text-white py-1 px-4 hover:bg-[#357a75] transition-colors duration-300 cursor-pointer"
+          >
+            Proceed to Checkout
+          </button>
+        </div>
+
         {showPopUp && (
           <div className="fixed inset-0 flex items-center justify-center bg-black/30 p-2">
             <div className="bg-white p-4 sm:p-6 rounded-lg shadow-sm max-w-sm w-full text-center">

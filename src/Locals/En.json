@@ -1,0 +1,17 @@
+{
+  "nav": {
+    "home": "Home",
+    "wishlist": "Wishlist",
+    "checkout": "Checkout"
+  },
+  "checkout": {
+    "title": "Checkout",
+    "apply": "Apply",
+    "payNow": "Pay Now",
+    "total": "Total",
+    "couponApplied": "Coupon applied! {{pct}}% off",
+    "invalidCoupon": "Invalid coupon",
+    "success": "✅ Payment successful! Redirecting to home…",
+    "back": "← Back"
+  }
+}

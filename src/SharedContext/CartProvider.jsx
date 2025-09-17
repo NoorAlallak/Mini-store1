@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { CartContext } from "./CartContext";
 export const CartProvider = ({ children }) => {
+  const [isDark, setIsDark] = useState(false);
   const [cartItems, setCartItems] = useState(() => {
     const storedCart = localStorage.getItem("cartItems");
     return storedCart ? JSON.parse(storedCart) : [];
@@ -8,6 +9,21 @@ export const CartProvider = ({ children }) => {
   useEffect(() => {
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
   }, [cartItems]);
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme) setIsDark(savedTheme === "dark");
+    else setIsDark(window.matchMedia("(prefers-color-scheme: dark)").matches);
+  }, []);
+
+  useEffect(() => {
+    if (isDark) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [isDark]);
 
   const addItem = (product) => {
     setCartItems((prev) => {
@@ -52,5 +68,15 @@ export const CartProvider = ({ children }) => {
     total,
   };
 
-  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
+  return (
+    <CartContext.Provider
+      value={{
+        ...value,
+        isDark,
+        toggleTheme: () => setIsDark((prev) => !prev),
+      }}
+    >
+      {children}
+    </CartContext.Provider>
+  );
 };
